@@ -1,218 +1,140 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZeiMaeiii Shop</title>
 <style>
-  :root{--bg:#071428;--card:#0b2033;--accent:pink;--muted:#9fb3cc}
-  body{font-family:Arial,Helvetica,sans-serif;margin:0;background:var(--bg);color:#e8f4ff}
-  .wrap{max-width:1000px;margin:18px auto;padding:18px}
-  header{display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .logo{font-weight:800;color:var(--accent)}
-  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:10px;margin-top:12px}
-  input,select,button,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;width:100%}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
-  .btn{background:var(--accent);color:#08101a;border:none;cursor:pointer;padding:10px 12px;border-radius:8px;font-weight:700}
-  .muted{color:var(--muted);font-size:14px}
-  table{width:100%;border-collapse:collapse}
-  th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
-  .admin-note{background:#0d2b3f;padding:8px;border-radius:8px;color:var(--muted);margin-top:8px}
-  .small{font-size:13px;color:var(--muted)}
+  :root {
+    --bg: #071428;
+    --card: #0b2033;
+    --accent: pink;
+    --muted: #9fb3cc;
+  }
+  body {
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: #e8f4ff;
+  }
+  header {
+    background: var(--card);
+    padding: 20px;
+    text-align: center;
+  }
+  header h1 {
+    margin:0;
+    color: var(--accent);
+    font-size: 2em;
+  }
+  .banner {
+    width:100%;
+    max-height:300px;
+    object-fit: cover;
+    display:block;
+  }
+  .wrap {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 0 20px;
+  }
+  .grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap:12px;
+    margin-top:12px;
+  }
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:14px;
+    border-radius:10px;
+    text-align:center;
+  }
+  .card img {
+    width:100%;
+    border-radius:8px;
+    height:180px;
+    object-fit:cover;
+  }
+  .card h4 {
+    margin:8px 0 4px;
+  }
+  .card .price {
+    color: var(--accent);
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .btn {
+    background: var(--accent);
+    color:#08101a;
+    border:none;
+    cursor:pointer;
+    padding:10px 12px;
+    border-radius:8px;
+    font-weight:700;
+  }
+  footer {
+    margin-top:40px;
+    padding:20px;
+    text-align:center;
+    color: var(--muted);
+    background: var(--card);
+  }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="logo">ZeiMaeiii Shop</div>
-      <div id="authUI">
-        <span class="small muted" id="userEmail">Chưa đăng nhập</span>
-        <button class="btn" id="btnSignOut" style="display:none">Đăng xuất</button>
-      </div>
-    </header>
 
-    <!-- Auth / Signup -->
-    <div class="card" id="authCard">
-      <h3>Đăng ký / Đăng nhập</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <input id="email" placeholder="Email" style="flex:1" />
-        <input id="password" placeholder="Mật khẩu" type="password" style="flex:1" />
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-        <input id="dob" placeholder="Ngày sinh (dd/mm/yyyy)" style="flex:1"/>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn" id="btnSignup">Đăng ký</button>
-        <button class="btn" id="btnSignin">Đăng nhập</button>
-      </div>
+<header>
+  <h1>ZeiMaeiii Shop</h1>
+</header>
+
+<img class="banner" src="https://i.imgur.com/7Vd6xFl.png" alt="Banner Shop">
+
+<div class="wrap">
+  <h2>Sản phẩm nổi bật</h2>
+  <div class="grid">
+    <div class="card">
+      <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 20K">
+      <h4>Acc Random</h4>
+      <div class="price">20K</div>
+      <button class="btn">Mua ngay</button>
     </div>
-
-    <!-- Shop / Buy -->
-    <div class="card" id="shopCard">
-      <h3>Sản phẩm</h3>
-      <div class="grid">
-        <div class="card">
-          <h4>20K - Acc Random</h4>
-          <div class="small muted">Acc từ LV1000 → Max</div>
-          <div style="margin-top:8px"><button class="btn buyBtn" data-pack="20K" data-amount="20000">Mua 20K</button></div>
-        </div>
-        <div class="card">
-          <h4>50K - Acc Max + GHM</h4>
-          <div class="small muted">Level Max + GHM</div>
-          <div style="margin-top:8px"><button class="btn buyBtn" data-pack="50K" data-amount="50000">Mua 50K</button></div>
-        </div>
-      </div>
-      <div class="small muted" style="margin-top:12px">⚠️ Bạn cần đăng nhập để mua.</div>
+    <div class="card">
+      <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 50K">
+      <h4>Acc Max + GHM</h4>
+      <div class="price">50K</div>
+      <button class="btn">Mua ngay</button>
     </div>
-
-    <!-- Buy form -->
-    <div class="card" id="buyFormCard" style="display:none">
-      <h3>Hoàn tất mua: <span id="selectedPack"></span></h3>
-      <div class="grid" style="grid-template-columns:1fr 1fr">
-        <input id="fullname" placeholder="Họ tên" />
-        <input id="phone" placeholder="SĐT / Zalo" />
-      </div>
-      <div style="margin-top:8px">
-        <input id="proof" placeholder="Link ảnh bill hoặc mã giao dịch" />
-      </div>
-      <div style="margin-top:8px;display:flex;gap:8px">
-        <button class="btn" id="btnConfirmBuy">Xác nhận & Gửi</button>
-        <button class="btn" id="btnCancelBuy" style="background:#9fb3cc;color:#06121b">Hủy</button>
-      </div>
-      <div id="buyResult" class="small muted" style="margin-top:8px"></div>
+    <div class="card">
+      <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 100K">
+      <h4>Race V4 Max</h4>
+      <div class="price">100K</div>
+      <button class="btn">Mua ngay</button>
     </div>
-
-    <!-- Orders -->
-    <div class="card" id="myOrdersCard" style="display:none">
-      <h3>Đơn của tôi</h3>
-      <div id="myOrdersList" class="small muted">Đang tải...</div>
+    <div class="card">
+      <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 500K">
+      <h4>Full VIP</h4>
+      <div class="price">500K</div>
+      <button class="btn">Mua ngay</button>
     </div>
-
-    <!-- Admin -->
-    <div class="card" id="adminCard" style="display:none">
-      <h3>Admin - Toàn bộ orders</h3>
-      <div class="admin-note">Chỉ Owner mới thấy</div>
-      <div id="adminOrders" class="small muted">Đang tải...</div>
+    <div class="card">
+      <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 150K">
+      <h4>Acc Premium</h4>
+      <div class="price">150K</div>
+      <button class="btn">Mua ngay</button>
+    </div>
+    <div class="card">
+      <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 300K">
+      <h4>Acc VIP + Gear</h4>
+      <div class="price">300K</div>
+      <button class="btn">Mua ngay</button>
     </div>
   </div>
+</div>
 
-<!-- Firebase -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, serverTimestamp, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+<footer>
+  &copy; 2025 ZeiMaeiii Shop | Liên hệ: zalo/fb
+</footer>
 
-  // === config thật của bạn ===
-  const firebaseConfig = {
-    apiKey: "AIzaSyBwxXwRhrsOOgbPWR4y5QyIVNXIPSY3jeY",
-    authDomain: "shop-roblox-ngon.firebaseapp.com",
-    projectId: "shop-roblox-ngon",
-    storageBucket: "shop-roblox-ngon.firebasestorage.app",
-    messagingSenderId: "1069258462751",
-    appId: "1:1069258462751:web:767167d6f048de0245a72a",
-    measurementId: "G-EQQ4XQY2WH"
-  };
-  const OWNER_UID = "OWNER_UID"; // đổi thành UID thật của bạn
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // UI
-  const userEmailEl = document.getElementById('userEmail');
-  const btnSignOut = document.getElementById('btnSignOut');
-  const authCard = document.getElementById('authCard');
-  const shopCard = document.getElementById('shopCard');
-  const buyFormCard = document.getElementById('buyFormCard');
-  const selectedPackEl = document.getElementById('selectedPack');
-  const buyResult = document.getElementById('buyResult');
-  const myOrdersCard = document.getElementById('myOrdersCard');
-  const myOrdersList = document.getElementById('myOrdersList');
-  const adminCard = document.getElementById('adminCard');
-  const adminOrders = document.getElementById('adminOrders');
-
-  // signup
-  document.getElementById('btnSignup').onclick = async ()=>{
-    const email=document.getElementById('email').value.trim();
-    const pass=document.getElementById('password').value.trim();
-    const dob=document.getElementById('dob').value.trim();
-    if(!email||!pass||!dob){alert('Nhập đủ thông tin');return;}
-    try{
-      const cred=await createUserWithEmailAndPassword(auth,email,pass);
-      await addDoc(collection(db,'users'),{uid:cred.user.uid,email,dob});
-      alert('Đăng ký thành công');
-    }catch(e){alert('Lỗi: '+e.message);}
-  };
-  document.getElementById('btnSignin').onclick=async()=>{
-    const email=document.getElementById('email').value.trim();
-    const pass=document.getElementById('password').value.trim();
-    try{await signInWithEmailAndPassword(auth,email,pass);}catch(e){alert('Lỗi: '+e.message);}
-  };
-  btnSignOut.onclick=()=>signOut(auth);
-
-  // state
-  onAuthStateChanged(auth,async(user)=>{
-    if(user){
-      userEmailEl.innerText=user.email;
-      btnSignOut.style.display='inline-block';
-      myOrdersCard.style.display='block';
-      loadMyOrders(user.uid);
-      if(user.uid===OWNER_UID){adminCard.style.display='block';loadAllOrders();}
-      else adminCard.style.display='none';
-    }else{
-      userEmailEl.innerText='Chưa đăng nhập';
-      btnSignOut.style.display='none';
-      myOrdersCard.style.display='none';
-      adminCard.style.display='none';
-    }
-  });
-
-  // Buy
-  let currentPack=null;
-  document.querySelectorAll('.buyBtn').forEach(b=>{
-    b.onclick=()=>{
-      if(!auth.currentUser){alert('Bạn cần đăng nhập để mua');return;}
-      currentPack={name:b.dataset.pack,amount:parseInt(b.dataset.amount)};
-      selectedPackEl.innerText=currentPack.name;
-      buyFormCard.style.display='block';
-    };
-  });
-  document.getElementById('btnCancelBuy').onclick=()=>buyFormCard.style.display='none';
-  document.getElementById('btnConfirmBuy').onclick=async()=>{
-    const user=auth.currentUser;if(!user){alert('Chưa login');return;}
-    const name=document.getElementById('fullname').value.trim();
-    const phone=document.getElementById('phone').value.trim();
-    const proof=document.getElementById('proof').value.trim();
-    if(!name||!phone||!proof){alert('Nhập đủ thông tin');return;}
-    await addDoc(collection(db,'orders'),{
-      userId:user.uid,email:user.email,name,phone,pack:currentPack.name,amount:currentPack.amount,proof,status:'pending',createdAt:serverTimestamp()
-    });
-    buyResult.innerText='Đã gửi đơn, shop sẽ xử lý.';
-    buyFormCard.style.display='none';
-    loadMyOrders(user.uid);
-  };
-
-  async function loadMyOrders(uid){
-    myOrdersList.innerText='Đang tải...';
-    const q=query(collection(db,'orders'),where('userId','==',uid),orderBy('createdAt','desc'));
-    const snap=await getDocs(q);
-    if(snap.empty){myOrdersList.innerText='Chưa có đơn.';return;}
-    myOrdersList.innerHTML='';
-    snap.forEach(doc=>{
-      const d=doc.data();
-      myOrdersList.innerHTML+=`<div>- ${d.pack} | ${d.status}</div>`;
-    });
-  }
-  async function loadAllOrders(){
-    adminOrders.innerText='Đang tải...';
-    const q=query(collection(db,'orders'),orderBy('createdAt','desc'));
-    const snap=await getDocs(q);
-    adminOrders.innerHTML='';
-    snap.forEach(doc=>{
-      const d=doc.data();
-      adminOrders.innerHTML+=`<div>[${d.email}] ${d.pack} - ${d.status}</div>`;
-    });
-  }
-</script>
 </body>
 </html>
