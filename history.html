@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lịch sử giao dịch - Shop Acc</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .table { width:100%; border-collapse: collapse; }
+    .table th, .table td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.04); text-align:left; }
+    .small { font-size:13px; color:#9fb3cc; }
+    .actions { display:flex; gap:8px; }
+    .btn-small { padding:6px 8px; border-radius:6px; background:#ffd54f; color:#06121b; text-decoration:none; font-weight:700; }
+    .clear { background:#ff6b6b;color:white; padding:6px 8px; border-radius:6px; cursor:pointer; border:none; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo"><img src="assets/banner.png" alt="Shop Banner"></div>
+      <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="buy.html">Mua Acc</a>
+        <a href="topup.html">Nạp thẻ</a>
+        <a href="contact.html">Liên hệ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Lịch sử giao dịch (lưu tại trình duyệt)</h2>
+    <p class="small">Ghi chú: Lịch sử này được lưu trên trình duyệt của bạn (localStorage). Nếu muốn lịch sử tập trung, hãy bật tính năng lưu server (Firebase/Google Sheets).</p>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div class="small">Tổng: <span id="totalCount">0</span> giao dịch</div>
+        <div class="actions">
+          <button class="clear" onclick="clearHistory()" title="Xóa toàn bộ lịch sử">Xóa toàn bộ</button>
+          <a class="btn-small" id="exportBtn" href="#">Xuất CSV</a>
+        </div>
+      </div>
+
+      <table class="table" id="historyTable">
+        <thead>
+          <tr><th>ID</th><th>Họ tên</th><th>SĐT</th><th>Gói</th><th>Proof</th><th>Thời gian</th></tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="6" class="small">Đang tải...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer>© 2025 Shop Acc</footer>
+
+<script>
+function readHistory() {
+  try {
+    const raw = localStorage.getItem('shop_acc_history');
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function formatDate(iso) {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString();
+  } catch(e) { return iso; }
+}
+
+function render() {
+  const data = readHistory();
+  const tbody = document.querySelector('#historyTable tbody');
+  tbody.innerHTML = '';
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="small">Chưa có giao dịch nào.</td></tr>';
+  } else {
+    data.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${item.id}</td>
+                      <td>${item.name || '-'}</td>
+                      <td>${item.phone || '-'}</td>
+                      <td>${item.note || '-'}</td>
+                      <td>${item.proof ? '<a href=\"'+item.proof+'\" target=\"_blank\">Xem</a>' : '-'}</td>
+                      <td class="small">${formatDate(item.createdAt)}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  document.getElementById('totalCount').innerText = data.length;
+  // setup export link
+  const exportBtn = document.getElementById('exportBtn');
+  exportBtn.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(convertToCSV(data));
+  exportBtn.setAttribute('download', 'history.csv');
+}
+
+function convertToCSV(arr) {
+  if (!arr.length) return '';
+  const keys = ['id','name','phone','note','proof','createdAt'];
+  const rows = [keys.join(',')];
+  arr.forEach(o => {
+    const r = keys.map(k => '"' + ( (o[k] || '').toString().replace(/"/g,'""') ) + '"' ).join(',');
+    rows.push(r);
+  });
+  return rows.join('\\n');
+}
+
+function clearHistory() {
+  if (!confirm('Xóa toàn bộ lịch sử giao dịch trên trình duyệt này?')) return;
+  localStorage.removeItem('shop_acc_history');
+  render();
+}
+
+document.addEventListener('DOMContentLoaded', render);
+</script>
+</body>
+</html>
