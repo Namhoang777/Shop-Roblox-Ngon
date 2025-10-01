@@ -1,44 +1,233 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Shop Acc Blox Fruits</title>
-<link rel="stylesheet" href="style.css" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Shop Acc - Firebase Demo</title>
+<style>
+  :root{--bg:#071428;--card:#0b2033;--accent:#ffd54f;--muted:#9fb3cc}
+  body{font-family:Arial,Helvetica,sans-serif;margin:0;background:var(--bg);color:#e8f4ff}
+  .wrap{max-width:1000px;margin:18px auto;padding:18px}
+  header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .logo{font-weight:800;color:var(--accent)}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:10px;margin-top:12px}
+  input,select,button,textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;width:100%}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+  .btn{background:var(--accent);color:#08101a;border:none;cursor:pointer;padding:10px 12px;border-radius:8px;font-weight:700}
+  .muted{color:var(--muted);font-size:14px}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+  .admin-note{background:#0d2b3f;padding:8px;border-radius:8px;color:var(--muted);margin-top:8px}
+  .small{font-size:13px;color:var(--muted)}
+</style>
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <div class="logo"><img src="assets/banner.png" alt="Shop Banner"></div>
-      <nav>
-        <a href="index.html">Trang chủ</a>
-        <a href="buy.html">Mua Acc</a>
-        <a href="topup.html">Nạp thẻ</a>
-        <a href="contact.html">Liên hệ</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="hero">
-      <h1 style="color:#fff; margin:6px 0;">Shop Acc Blox Fruits — Uy tín, Giao nhanh</h1>
-      <p style="color:#9fb3cc; max-width:800px; margin:6px auto;">Tất cả acc bảo hành 48h đăng nhập. Chuyển khoản MB Bank hoặc gửi mã thẻ qua Zalo để nhận acc.</p>
-    </section>
-
-    <section class="notice">Danh mục gói đang bán: 20K / 50K / 100K / 500K — Bấm Mua để chuyển trang thanh toán có hướng dẫn</section>
-
-    <section>
-      <div class="grid">
-        <div class="card"><h3>20K — Acc Random</h3><p>Acc từ LV 1000 → Max</p><div class="price">20K</div><a class="btn" href="buy.html#pkg20">Mua ngay</a></div>
-        <div class="card"><h3>50K — Acc Max + GHM</h3><p>Level Max + Gamepass God Human</p><div class="price">50K</div><a class="btn" href="buy.html#pkg50">Mua ngay</a></div>
-        <div class="card"><h3>100K — Race V4 Max</h3><p>Race V4 + LV Max + CDK + Sgt</p><div class="price">100K</div><a class="btn" href="buy.html#pkg100">Mua ngay</a></div>
-        <div class="card"><h3>500K — Full VIP</h3><p>FULL 6 Race V4 + FULL Gear</p><div class="price">500K</div><a class="btn" href="buy.html#pkg500">Mua ngay</a></div>
+  <div class="wrap">
+    <header>
+      <div class="logo">SHOP ACC - DEMO</div>
+      <div id="authUI">
+        <span class="small muted" id="userEmail">Chưa đăng nhập</span>
+        <button class="btn" id="btnSignOut" style="display:none">Đăng xuất</button>
       </div>
-    </section>
-  </main>
+    </header>
 
-  <footer>
-    © 2025 Shop Acc — Liên hệ Zalo: 0123456789 • MB Bank: 9704 xxxx xxxx 1234 (Nguyễn Văn A)
-  </footer>
-</body>
-</html>
+    <!-- Auth / Signup -->
+    <div class="card" id="authCard">
+      <h3>Đăng ký / Đăng nhập</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input id="email" placeholder="Email" style="flex:1" />
+        <input id="password" placeholder="Mật khẩu" type="password" style="flex:1" />
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn" id="btnSignup">Đăng ký</button>
+        <button class="btn" id="btnSignin">Đăng nhập</button>
+      </div>
+      <div class="small muted" style="margin-top:8px">Lưu ý: dùng email thật để sau này quản lý đơn.</div>
+    </div>
+
+    <!-- Shop / Buy -->
+    <div class="card" id="shopCard" style="display:none">
+      <h3>Mua Acc (phải đăng nhập)</h3>
+      <div class="grid">
+        <div class="card">
+          <h4>20K - Acc Random</h4>
+          <div class="small muted">Acc từ LV1000 → Max</div>
+          <div style="margin-top:8px"><button class="btn buyBtn" data-pack="20K" data-amount="20000">Mua 20K</button></div>
+        </div>
+        <div class="card">
+          <h4>50K - Acc Max + GHM</h4>
+          <div class="small muted">Level Max + GHM</div>
+          <div style="margin-top:8px"><button class="btn buyBtn" data-pack="50K" data-amount="50000">Mua 50K</button></div>
+        </div>
+        <div class="card">
+          <h4>100K - Race V4 Max</h4>
+          <div class="small muted">Race V4 + CDK + Sgt</div>
+          <div style="margin-top:8px"><button class="btn buyBtn" data-pack="100K" data-amount="100000">Mua 100K</button></div>
+        </div>
+        <div class="card">
+          <h4>500K - Full VIP</h4>
+          <div class="small muted">FULL 6 Race V4 + FULL Gear</div>
+          <div style="margin-top:8px"><button class="btn buyBtn" data-pack="500K" data-amount="500000">Mua 500K</button></div>
+        </div>
+      </div>
+      <div class="small muted" style="margin-top:12px">Sau khi chọn gói, bạn sẽ điền thông tin & proof chuyển khoản.</div>
+    </div>
+
+    <!-- Buy form modal-like -->
+    <div class="card" id="buyFormCard" style="display:none">
+      <h3>Hoàn tất mua: <span id="selectedPack"></span></h3>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <input id="fullname" placeholder="Họ tên" />
+        <input id="phone" placeholder="SĐT / Zalo" />
+      </div>
+      <div style="margin-top:8px">
+        <input id="proof" placeholder="Link ảnh bill hoặc mã giao dịch" />
+      </div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button class="btn" id="btnConfirmBuy">Xác nhận & Gửi</button>
+        <button class="btn" id="btnCancelBuy" style="background:#9fb3cc;color:#06121b">Hủy</button>
+      </div>
+      <div id="buyResult" class="small muted" style="margin-top:8px"></div>
+    </div>
+
+    <!-- My Orders -->
+    <div class="card" id="myOrdersCard" style="display:none">
+      <h3>Đơn của tôi</h3>
+      <div id="myOrdersList" class="small muted">Đang tải...</div>
+    </div>
+
+    <!-- Admin view -->
+    <div class="card" id="adminCard" style="display:none">
+      <h3>Admin - Toàn bộ orders</h3>
+      <div class="admin-note">Bạn đang xem dashboard admin (chỉ owner mới thấy)</div>
+      <div id="adminOrders" class="small muted">Đang tải...</div>
+    </div>
+  </div>
+
+<!-- Firebase SDK (module) -->
+<script type="module">
+  // ====== THAY CHỖ NÀY bằng firebaseConfig của bạn ======
+  const firebaseConfig = {
+    apiKey: "YOUR_APIKEY",
+    authDomain: "YOUR_AUTHDOMAIN",
+    projectId: "YOUR_PROJECTID",
+    // ... còn lại
+  };
+  // Và thay OWNER_UID = UID của bạn (owner)
+  const OWNER_UID = "OWNER_UID";
+
+  // ====== Firebase imports ======
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, serverTimestamp, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // UI refs
+  const userEmailEl = document.getElementById('userEmail');
+  const btnSignOut = document.getElementById('btnSignOut');
+  const shopCard = document.getElementById('shopCard');
+  const authCard = document.getElementById('authCard');
+  const buyFormCard = document.getElementById('buyFormCard');
+  const selectedPackEl = document.getElementById('selectedPack');
+  const buyResult = document.getElementById('buyResult');
+  const myOrdersList = document.getElementById('myOrdersList');
+  const adminCard = document.getElementById('adminCard');
+  const adminOrders = document.getElementById('adminOrders');
+
+  // Auth actions
+  document.getElementById('btnSignup').onclick = async () => {
+    const email = document.getElementById('email').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    if(!email||!pass){ alert('Nhập email & password'); return; }
+    try{
+      await createUserWithEmailAndPassword(auth, email, pass);
+      alert('Đăng ký thành công. Đã đăng nhập.');
+    }catch(e){ alert('Lỗi: ' + e.message); }
+  };
+  document.getElementById('btnSignin').onclick = async () => {
+    const email = document.getElementById('email').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    if(!email||!pass){ alert('Nhập email & password'); return; }
+    try{
+      await signInWithEmailAndPassword(auth, email, pass);
+      alert('Đăng nhập thành công.');
+    }catch(e){ alert('Lỗi: ' + e.message); }
+  };
+  btnSignOut.onclick = () => signOut(auth);
+
+  // onAuth state change
+  onAuthStateChanged(auth, async (user) => {
+    if(user){
+      userEmailEl.innerText = user.email + ' ('+user.uid+')';
+      btnSignOut.style.display = 'inline-block';
+      shopCard.style.display = 'block';
+      authCard.style.display = 'none';
+      myOrdersCard.style.display = 'block';
+      loadMyOrders(user.uid);
+      // admin check
+      if(user.uid === OWNER_UID){
+        adminCard.style.display = 'block';
+        loadAllOrders(); // admin load
+      } else {
+        adminCard.style.display = 'none';
+      }
+    } else {
+      userEmailEl.innerText = 'Chưa đăng nhập';
+      btnSignOut.style.display = 'none';
+      shopCard.style.display = 'none';
+      authCard.style.display = 'block';
+      myOrdersCard.style.display = 'none';
+      adminCard.style.display = 'none';
+    }
+  });
+
+  // Buy flow
+  let currentPack = null;
+  document.querySelectorAll('.buyBtn').forEach(b=>{
+    b.onclick = ()=> {
+      currentPack = { name: b.dataset.pack, amount: parseInt(b.dataset.amount) };
+      selectedPackEl.innerText = currentPack.name + ' - ' + (currentPack.amount/1000) + 'K';
+      buyFormCard.style.display = 'block';
+      buyResult.innerText = '';
+    };
+  });
+  document.getElementById('btnCancelBuy').onclick = ()=> { buyFormCard.style.display = 'none'; };
+
+  document.getElementById('btnConfirmBuy').onclick = async ()=>{
+    const user = auth.currentUser;
+    if(!user){ alert('Vui lòng đăng nhập'); return; }
+    const name = document.getElementById('fullname').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const proof = document.getElementById('proof').value.trim();
+    if(!name||!phone||!proof){ alert('Nhập đủ thông tin'); return; }
+
+    try{
+      const docRef = await addDoc(collection(db,'orders'), {
+        userId: user.uid,
+        email: user.email,
+        name, phone,
+        pack: currentPack.name,
+        amount: currentPack.amount,
+        proof,
+        status: 'pending',
+        createdAt: serverTimestamp()
+      });
+      buyResult.innerText = 'Order đã tạo. ID: ' + docRef.id + '. Shop sẽ xử lý sau khi bạn gửi proof.';
+      buyFormCard.style.display = 'none';
+      // reload my orders
+      loadMyOrders(user.uid);
+    }catch(e){
+      alert('Lỗi tạo order: ' + e.message);
+    }
+  };
+
+  // Load user's orders
+  async function loadMyOrders(uid){
+    myOrdersList.innerText = 'Đang tải...';
+    try{
+      const q = query(collection(db,'orders'), where('userId','==',uid), orderBy('createdAt','desc'));
+      const snap = await getDocs(q);
+      if(snap.empty){ myOrdersLi
