@@ -20,12 +20,23 @@
   header {
     background: var(--card);
     padding: 20px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   header h1 {
     margin:0;
     color: var(--accent);
     font-size: 2em;
+  }
+  .login-btn {
+    background: var(--accent);
+    color:#08101a;
+    border:none;
+    cursor:pointer;
+    padding:8px 12px;
+    border-radius:8px;
+    font-weight:700;
   }
   .banner {
     width:100%;
@@ -73,6 +84,10 @@
     border-radius:8px;
     font-weight:700;
   }
+  .btn:disabled {
+    opacity:0.5;
+    cursor:not-allowed;
+  }
   footer {
     margin-top:40px;
     padding:20px;
@@ -80,54 +95,89 @@
     color: var(--muted);
     background: var(--card);
   }
+
+  /* Modal login */
+  .modal {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.7);
+    justify-content:center;
+    align-items:center;
+  }
+  .modal-content {
+    background: var(--card);
+    padding:30px;
+    border-radius:12px;
+    text-align:center;
+    width:300px;
+  }
+  .modal-content input {
+    width:100%;
+    padding:8px;
+    margin:8px 0;
+    border-radius:6px;
+    border:none;
+  }
+  .modal-content .submit-btn {
+    background: var(--accent);
+    color:#08101a;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+  }
 </style>
 </head>
 <body>
 
 <header>
   <h1>ZeiMaeiii Shop</h1>
+  <button class="login-btn" id="loginBtn">Đăng nhập</button>
 </header>
 
 <img class="banner" src="https://i.imgur.com/7Vd6xFl.png" alt="Banner Shop">
 
 <div class="wrap">
   <h2>Sản phẩm nổi bật</h2>
-  <div class="grid">
+  <div class="grid" id="productGrid">
     <div class="card">
       <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 20K">
       <h4>Acc Random</h4>
       <div class="price">20K</div>
-      <button class="btn">Mua ngay</button>
+      <button class="btn" disabled>Mua ngay</button>
     </div>
     <div class="card">
       <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 50K">
       <h4>Acc Max + GHM</h4>
       <div class="price">50K</div>
-      <button class="btn">Mua ngay</button>
+      <button class="btn" disabled>Mua ngay</button>
     </div>
     <div class="card">
       <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 100K">
       <h4>Race V4 Max</h4>
       <div class="price">100K</div>
-      <button class="btn">Mua ngay</button>
+      <button class="btn" disabled>Mua ngay</button>
     </div>
     <div class="card">
       <img src="https://media.discordapp.net/attachments/1402132991437963324/1422978220743069859/image.png?ex=68dea33d&is=68dd51bd&hm=17ee5138ce4dbe18267482ebc3fbb720b1bec9f711962a6be53afc3c2a76b931&=&format=webp&quality=lossless" alt="Acc 500K">
       <h4>Full VIP</h4>
       <div class="price">500K</div>
-      <button class="btn">Mua ngay</button>
+      <button class="btn" disabled>Mua ngay</button>
     </div>
     <div class="card">
       <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 150K">
       <h4>Acc Premium</h4>
       <div class="price">150K</div>
-      <button class="btn">Mua ngay</button>
+      <button class="btn" disabled>Mua ngay</button>
     </div>
     <div class="card">
       <img src="https://i.imgur.com/0XxUeTQ.png" alt="Acc 300K">
       <h4>Acc VIP + Gear</h4>
       <div class="price">300K</div>
-      <button class="btn">Mua ngay</button>
+      <button class="btn" disabled>Mua ngay</button>
     </div>
   </div>
 </div>
@@ -135,6 +185,48 @@
 <footer>
   &copy; 2025 ZeiMaeiii Shop | Liên hệ: zalo/fb
 </footer>
+
+<!-- Modal Login -->
+<div class="modal" id="loginModal">
+  <div class="modal-content">
+    <h3>Đăng nhập</h3>
+    <input type="text" id="username" placeholder="Tên đăng nhập">
+    <input type="password" id="password" placeholder="Mật khẩu">
+    <button class="submit-btn" id="submitLogin">Đăng nhập</button>
+  </div>
+</div>
+
+<script>
+const loginBtn = document.getElementById('loginBtn');
+const modal = document.getElementById('loginModal');
+const submitLogin = document.getElementById('submitLogin');
+const productButtons = document.querySelectorAll('.card .btn');
+
+loginBtn.addEventListener('click', () => {
+  modal.style.display = 'flex';
+});
+
+submitLogin.addEventListener('click', () => {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  // Demo login đơn giản (tên: user, mật khẩu: 123)
+  if(username === 'user' && password === '123') {
+    alert('Đăng nhập thành công!');
+    modal.style.display = 'none';
+    loginBtn.textContent = 'Xin chào, ' + username;
+    // Bật nút mua hàng
+    productButtons.forEach(btn => btn.disabled = false);
+  } else {
+    alert('Sai tên đăng nhập hoặc mật khẩu!');
+  }
+});
+
+// Đóng modal khi click ra ngoài
+window.addEventListener('click', e => {
+  if(e.target === modal) modal.style.display = 'none';
+});
+</script>
 
 </body>
 </html>
